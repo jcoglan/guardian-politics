@@ -8,6 +8,14 @@ module Guardian
         @constituency, @data = constituency, hash
       end
       
+      def id
+        @id ||= @data['aristotle-id']
+      end
+      
+      def ==(other)
+        self.class === other and other.id == id
+      end
+      
       def name
         @name ||= @data['name']
       end
