@@ -12,8 +12,8 @@ module Guardian
         @id ||= @data['aristotle-id']
       end
       
-      def ==(other)
-        self.class === other and other.id == id
+      def url
+        @url ||= @data['json-url']
       end
       
       def name
@@ -22,6 +22,14 @@ module Guardian
       
       def party_name
         @party_name ||= @data['party']['name']
+      end
+      
+      def candidacies
+        person.candidacies
+      end
+      
+      def person
+        @person ||= Person.new(ApiClient.get(url))
       end
     end
     

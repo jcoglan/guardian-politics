@@ -17,14 +17,9 @@ describe Guardian::Politics::Candidate do
     candidate.party_name.should == "Labour"
   end
   
-  describe :equality do
-    it "is equal to another Candidate with the same ID" do
-      candidate.should == Guardian::Politics::Candidate.new(Object.new, {"aristotle-id" => 6299})
-    end
-    
-    it "is not equal to another Candidate with a different ID" do
-      candidate.should_not == Guardian::Politics::Candidate.new(Object.new, {"aristotle-id" => 6300})
-    end
+  it "has a list of candidacies" do
+    candidate.candidacies.should be_kind_of(Array)
+    candidate.candidacies.size.should == 3
   end
 end
 

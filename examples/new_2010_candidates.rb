@@ -6,8 +6,12 @@ elections = Guardian::Politics.elections
 election_2010 = elections.find { |e| e.year == 2010 }
 
 new_candidates = election_2010.candidates.select do |candidate|
-  prior_elections = elections.select { |e| e.candidates.include?(candidate) }
-  prior_elections.map { |e| e.year } == [2010]
+  begin
+    candidate.candidacies.size == 1
+  rescue
+    puts "Could not get data for #{candidate.name} from #{candidate.url}"
+    false
+  end
 end
 
 csv = FasterCSV.generate do |table|
