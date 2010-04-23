@@ -3,12 +3,15 @@ require dir + '/../lib/guardian'
 require 'fastercsv'
 
 elections = Guardian::Politics.elections
-election_2010 = elections.find { |e| e.year == 2010 }
+election = elections.find { |e| e.year == ARGV.first.to_i }
 
-new_candidates = election_2010.candidates.select do |candidate|
+new_candidates = election.candidates.select do |candidate|
   begin
-    candidate.candidacies.size == 1
-  rescue
+    ge_candidacies = candidate.candidacies.select { |c| c.election_type == "general election" }
+    years = ge_candidacies.map { |c| c.year }
+    years.min == election.year
+  rescue => e
+    p e
     puts "Could not get data for #{candidate.name} from #{candidate.url}"
     false
   end
@@ -21,5 +24,4 @@ csv = FasterCSV.generate do |table|
   end
 end
 
-File.open(dir + '/candidates.csv', 'w') { |f| f.write csv }
-
+File.open(dir + "/candidates-#{election.year}.csv", 'w') { |f| f.write csv }
